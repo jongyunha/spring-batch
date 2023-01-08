@@ -4,10 +4,12 @@ import com.jongyun.chapter.ch04.listner.JobLoggerListener
 import com.jongyun.chapter.ch04.validator.ParameterValidator
 import org.springframework.batch.core.Job
 import org.springframework.batch.core.Step
+import org.springframework.batch.core.StepExecutionListener
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory
 import org.springframework.batch.core.configuration.annotation.JobScope
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory
 import org.springframework.batch.core.configuration.annotation.StepScope
+import org.springframework.batch.core.listener.ExecutionContextPromotionListener
 import org.springframework.batch.repeat.RepeatStatus
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
@@ -28,9 +30,10 @@ class SimpleJobConfiguration(
         return jobBuilderFactory.get("simpleJob")
             .start(simpleStep)
             .next(step2())
+            .next(step3())
             .validator(parameterValidator)
             .incrementer(dailyJobTimestamper)
-            .listener(jobLoggerListener)
+            .listener(stepExecutionListener())
             .build()
     }
 
@@ -49,6 +52,22 @@ class SimpleJobConfiguration(
         return stepBuilderFactory.get("step2")
             .tasklet(executionContextTasklet)
             .build()
+    }
 
+    fun step3(): Step {
+        return stepBuilderFactory.get("step2")
+            .tasklet { contribution, chunkContext ->
+                val name = chunkContext.stepContext.jobParameters["name"]
+                println("Good Bye, $name")
+                RepeatStatus.FINISHED
+            }
+            .build()
+    }
+
+    fun stepExecutionListener(): StepExecutionListener {
+        // execution context 에서 name 의 키를 찾으면 복사한다.
+        val listener = ExecutionContextPromotionListener()
+        listener.setKeys(arrayOf("name"))
+        return listener
     }
 }
