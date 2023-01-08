@@ -8,7 +8,6 @@ import org.springframework.batch.core.StepExecutionListener
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory
 import org.springframework.batch.core.configuration.annotation.JobScope
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory
-import org.springframework.batch.core.configuration.annotation.StepScope
 import org.springframework.batch.core.listener.ExecutionContextPromotionListener
 import org.springframework.batch.repeat.RepeatStatus
 import org.springframework.beans.factory.annotation.Value
