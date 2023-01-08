@@ -7,7 +7,6 @@ import org.springframework.boot.runApplication
 
 @EnableBatchProcessing
 @SpringBootApplication
-@ConfigurationPropertiesScan("com.jongyun.chapter.ch04")
 class BesideBatchApplication
 
 fun main(args: Array<String>) {

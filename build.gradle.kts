@@ -19,7 +19,7 @@ plugins {
     kotlin("jvm") version kotlinVersion
     kotlin("kapt") version kotlinVersion apply false
     kotlin("plugin.spring") version kotlinVersion apply false
-    id("org.springframework.boot") version "2.7.7" apply false
+    id("org.springframework.boot") version "2.5.3" apply false
     id("io.spring.dependency-management") version "1.0.15.RELEASE"
     id("org.jlleitschuh.gradle.ktlint") version "10.1.0" apply false
     id("org.jlleitschuh.gradle.ktlint-idea") version "10.1.0"
