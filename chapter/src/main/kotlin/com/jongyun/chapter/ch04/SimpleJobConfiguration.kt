@@ -1,5 +1,6 @@
 package com.jongyun.chapter.ch04
 
+import com.jongyun.chapter.ch04.validator.ParameterValidator
 import org.springframework.batch.core.Job
 import org.springframework.batch.core.Step
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory
@@ -14,13 +15,15 @@ import org.springframework.stereotype.Component
 @Component
 class SimpleJobConfiguration(
     val jobBuilderFactory: JobBuilderFactory,
-    val stepBuilderFactory: StepBuilderFactory
+    val stepBuilderFactory: StepBuilderFactory,
+    val parameterValidator: ParameterValidator
 ) {
 
     @Bean
     fun simpleJob(simpleStep: Step): Job {
         return jobBuilderFactory.get("simpleJob")
             .start(simpleStep)
+            .validator(parameterValidator)
             .build()
     }
 
