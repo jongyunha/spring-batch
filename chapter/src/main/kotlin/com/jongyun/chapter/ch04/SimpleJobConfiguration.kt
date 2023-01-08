@@ -1,12 +1,12 @@
 package com.jongyun.chapter.ch04
 
+import com.jongyun.chapter.ch04.listner.JobLoggerListener
 import com.jongyun.chapter.ch04.validator.ParameterValidator
 import org.springframework.batch.core.Job
 import org.springframework.batch.core.Step
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory
 import org.springframework.batch.core.configuration.annotation.JobScope
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory
-import org.springframework.batch.core.configuration.annotation.StepScope
 import org.springframework.batch.repeat.RepeatStatus
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
@@ -16,7 +16,9 @@ import org.springframework.stereotype.Component
 class SimpleJobConfiguration(
     val jobBuilderFactory: JobBuilderFactory,
     val stepBuilderFactory: StepBuilderFactory,
-    val parameterValidator: ParameterValidator
+    val parameterValidator: ParameterValidator,
+    val dailyJobTimestamper: DailyJobTimestamper,
+    val jobLoggerListener: JobLoggerListener
 ) {
 
     @Bean
@@ -24,6 +26,8 @@ class SimpleJobConfiguration(
         return jobBuilderFactory.get("simpleJob")
             .start(simpleStep)
             .validator(parameterValidator)
+            .incrementer(dailyJobTimestamper)
+            .listener(jobLoggerListener)
             .build()
     }
 
@@ -37,5 +41,4 @@ class SimpleJobConfiguration(
             }
             .build()
     }
-
 }
